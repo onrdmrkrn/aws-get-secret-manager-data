@@ -3,15 +3,15 @@ from requests_aws4auth import AWS4Auth
 import json
 import boto3
 
+region_name = "eu-west-1"
+# Create a Secrets Manager client
+session = boto3.session.Session()
+client = session.client(
+    service_name='secretsmanager',
+    region_name=region_name)
 
 def rdsdbconnect(rasyonadb):
     secret_name = rasyonadb
-    region_name = "eu-west-1"
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name)
     get_secret_value_response = client.get_secret_value(SecretId=secret_name)
     secret = get_secret_value_response['SecretString']
     parametersdb = json.loads(secret)
@@ -26,12 +26,6 @@ def rdsdbconnect(rasyonadb):
 
 def prtg_connect(rasyonadb):
     secret_name = rasyonadb
-    region_name = "eu-west-1"
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name)
     get_secret_value_response = client.get_secret_value(SecretId=secret_name)
     secret = get_secret_value_response['SecretString']
     parametersdb = json.loads(secret)
@@ -43,4 +37,3 @@ def prtg_connect(rasyonadb):
     prtg_count = parametersdb["count"]
     prtg_id = parametersdb["id"]
     return prtg_ip, prtg_username, prtg_passhash, prtg_port, prtg_count, prtg_id
-
